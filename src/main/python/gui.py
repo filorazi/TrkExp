@@ -3,8 +3,10 @@ import sys
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import numpy as np
+import random
 
 class Canvas(FigureCanvas):
+
 
     def __init__(self, parent = None, width = 5, height = 5, dpi = 100):
         fig = Figure(figsize=(width, height), dpi=dpi)
@@ -28,8 +30,9 @@ class  Gui(QDialog):
         mainLayout = QGridLayout()
         tab = QTabWidget()
         # TODO:
-        dbcon = dbConnector("database.db")
-        self.data = dbcon.getCatData()
+        #dbcon = dbConnector("database.db")
+        self.data = []#dbcon.getCatData()
+        self.canvas = FigureCanvas(Figure(figsize=(4,2)))
 
         tab.addTab(self.frontPage(),"1")
         tab.addTab(self.secondPage(),"2")
@@ -40,20 +43,9 @@ class  Gui(QDialog):
 
     def frontPage(self):
         page = QWidget()
-
-        #cate = QLabel("Categories")
-        #expe = QLabel("Expences")
-        #a = QLabel("Categories")
-        #b = QLabel("Expences")
-        #c = QLabel("Categories")
-        #d = QLabel("Expences")
-
-        #canvas = FigureCanvas(Figure(figsize=(4,2)))
-
-        outernHBox = QVBoxLayout()
-        outernHBox.addWidget(dataTable())
-        outernHBox.addWidget(graphPlot())
-
+        outernHBox = QHBoxLayout()
+        outernHBox.addWidget(self.dataTable())
+        outernHBox.addWidget(self.graphPlot())
         page.setLayout(outernHBox)
         return page
 
@@ -71,15 +63,30 @@ class  Gui(QDialog):
             table.setItem(i,1, QTableWidgetItem(nb))
             i -= -1
 
+        table.setEditTriggers(QTableWidget.NoEditTriggers)
+
         return table
 
-    def graphPlot():
-        frame = QWidget()
+    def graphPlot(self):
         flayout = QVBoxLayout()
-        canvas = FigureCanvas(Figure(figsize=(4,2)))
-        flayout.addWidget(canvas)
-        
-        return
+        flayout.addWidget(self.canvas)
+        button = QPushButton(self)
+        button.setToolTip("boh")
+        button.clicked.connect(self.on_click)
+        flayout.addWidget(button)
+        widget = QWidget()
+        widget.setLayout(flayout)
+        return widget
+
+    def on_click(self,canvas):
+        # TODO:
+        data = [random.random() for i in range(25)]
+        ax = self.canvas.figure.add_subplot(111)
+        ax.clear()
+        self.canvas.draw()
+        ax.plot(data, 'r-')
+        ax.set_title('PyQt Matplotlib Example')
+        self.canvas.draw()
 
 
     def secondPage(self):
