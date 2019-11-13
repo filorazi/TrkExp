@@ -6,8 +6,6 @@ import numpy as np
 import random
 
 class Canvas(FigureCanvas):
-
-
     def __init__(self, parent = None, width = 5, height = 5, dpi = 100):
         fig = Figure(figsize=(width, height), dpi=dpi)
         self.axes = fig.add_subplot(111)
@@ -22,6 +20,7 @@ class Canvas(FigureCanvas):
         ax.pie(x, labels=labels)
 
 
+
 class  Gui(QDialog):
     def __init__(self):
         super(Gui, self).__init__()
@@ -34,14 +33,14 @@ class  Gui(QDialog):
         self.data = []#dbcon.getCatData()
         self.canvas = FigureCanvas(Figure(figsize=(4,2)))
 
-        tab.addTab(self.frontPage(),"1")
+        tab.addTab(self.firstpage(),"1")
         tab.addTab(self.secondPage(),"2")
         tab.addTab(self.lastPage(),"3")
         mainLayout.addWidget(tab)
         self.setLayout(mainLayout)
         self.setWindowTitle("Styles")
 
-    def frontPage(self):
+    def secondPage(self):
         page = QWidget()
         outernHBox = QHBoxLayout()
         outernHBox.addWidget(self.dataTable())
@@ -53,10 +52,10 @@ class  Gui(QDialog):
         table = QTableWidget()
         # TODO:
         rows = len(self.data)
+        print(rows)
         cols = 2
         table.setColumnCount(cols)
-        table.setRowCount(cols)
-
+        table.setRowCount(rows)
         i=0
         for cat, nb in self.data:
             table.setItem(i,0, QTableWidgetItem(cat))
@@ -88,14 +87,19 @@ class  Gui(QDialog):
         ax.set_title('PyQt Matplotlib Example')
         self.canvas.draw()
 
+    def firstpage(self):
+        formGroupBox = QGroupBox("Form layout")
+        layout = QFormLayout()
 
-    def secondPage(self):
-        page = QWidget()
-        label = QLabel("ccccc")
-        vbox = QVBoxLayout()
-        vbox.addWidget(label)
-        page.setLayout(vbox)
-        return page
+        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        buttonBox.accepted.connect(self.accept)
+        buttonBox.rejected.connect(self.reject)
+        money = QSpinBox()
+        money.
+        layout.addRow(QLabel("Name:"), QSpinBox())
+        layout.addRow(QLabel("Country:"), QComboBox())
+        layout.addRow(QLabel("Age:"), QSpinBox())
+        self.formGroupBox.setLayout(layout)
 
     def lastPage(self):
         page = QWidget()
