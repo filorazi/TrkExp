@@ -87,19 +87,27 @@ class  Gui(QDialog):
         ax.set_title('PyQt Matplotlib Example')
         self.canvas.draw()
 
+    def printa(self):
+        print(float(self.money.cleanText()))
+        return
+
     def firstpage(self):
-        formGroupBox = QGroupBox("Form layout")
+        formGroupBox = QGroupBox()
         layout = QFormLayout()
 
-        buttonBox = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
-        buttonBox.accepted.connect(self.accept)
-        buttonBox.rejected.connect(self.reject)
-        money = QSpinBox()
-        money.
-        layout.addRow(QLabel("Name:"), QSpinBox())
-        layout.addRow(QLabel("Country:"), QComboBox())
-        layout.addRow(QLabel("Age:"), QSpinBox())
-        self.formGroupBox.setLayout(layout)
+        btn = QPushButton()
+        btn.clicked.connect(self.printa)
+
+
+        self.money = QDoubleSpinBox()
+        self.money.setDecimals(2)
+        self.money.setSuffix("€")
+        layout.addRow(QLabel("money:"), self.money)
+        layout.addRow(QLabel("Category:"), QComboBox())
+        layout.addWidget(btn)
+        formGroupBox.setLayout(layout)
+
+        return formGroupBox
 
     def lastPage(self):
         page = QWidget()
